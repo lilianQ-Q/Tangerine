@@ -1,0 +1,16 @@
+{
+	"libs" :
+	{
+		"Autoloader" : 
+		{
+			"name" : "PhpAutoloader",
+			"address" : "https://github.com/lilianQ-Q/PhpAutoloader.git"
+		},
+
+		"DependencyInjectionManager" :
+		{
+			"name" : "DependencyInjectionManager",
+			"address" : "https://github.com/lilianQ-Q/DependencyInjectionManager.git"
+		}
+	}
+}
