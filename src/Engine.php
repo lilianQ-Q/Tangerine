@@ -6,12 +6,13 @@ class Engine
 	public array $blocks = array();
 	public string $cachePath;
 	public string $viewsFolder;
-	public bool $cacheEnabled = false;
+	public bool $cacheEnabled;
 
-	public function __construct(string $cachePath, string $viewFolder)
+	public function __construct(string $cachePath, string $viewFolder, bool $cacheEnabled = false)
 	{
 		$this->cachePath = $cachePath;
 		$this->viewsFolder = $viewFolder;
+		$this->cacheEnabled = $cacheEnabled;
 	}
 
 	/**
@@ -19,15 +20,21 @@ class Engine
 	 * 
 	 * @param $fileName Name of the view to render
 	 * @param $data Array of data to pass to the view
+	 * @return string
 	 */
-	public function render(string $fileName, $data = array()) : void
+	public function render(string $fileName, $data = array()) : string
 	{
 		$cachedFile = $this->cache($fileName);
 		extract($data, EXTR_SKIP);
+
+		ob_start();
 		require($cachedFile);
+		$result = ob_get_clean();
 
 		if (!$this->cacheEnabled)
 			$this->clearCache();
+
+		return ($result);
 	}
 
 	/**
