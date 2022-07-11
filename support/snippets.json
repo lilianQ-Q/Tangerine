@@ -1,0 +1,51 @@
+{
+	"Yield" : 
+	{
+		"prefix" : "yield",
+		"body" : 
+		[
+			"{% yield $1 %}"
+		],
+		"description": "Creates a yield section for your Tangerine template"
+	},
+
+	"Block" : 
+	{
+		"prefix" : "block",
+		"body" : 
+		[
+			"{% block $1 %}"
+		],
+		"description": "Creates a block section for your Tangerine template"
+	},
+
+	"Extends" : 
+	{
+		"prefix" : "extends",
+		"body" : 
+		[
+			"{% extends $1 %}"
+		],
+		"description": "Creates a extends section for your Tangerine template"
+	},
+
+	"Include" : 
+	{
+		"prefix" : "include",
+		"body" : 
+		[
+			"{% include $1 %}"
+		],
+		"description": "Creates a include section for your Tangerine template"
+	},
+
+	"Tangerine section" : 
+	{
+		"prefix" : "{%",
+		"body": 
+		[
+			"{% $1 %"
+		],
+		"description": "Creates a default section for your Tangerine template"
+	}
+}
