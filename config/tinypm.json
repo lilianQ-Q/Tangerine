@@ -7,10 +7,10 @@
 			"address" : "https://github.com/lilianQ-Q/PhpAutoloader.git"
 		},
 
-		"DependencyInjectionManager" :
+		"Tester" :
 		{
-			"name" : "DependencyInjectionManager",
-			"address" : "https://github.com/lilianQ-Q/DependencyInjectionManager.git"
+			"name" : "Everest",
+			"address" : "https://github.com/lilianQ-Q/Everest.git"
 		}
 	}
 }

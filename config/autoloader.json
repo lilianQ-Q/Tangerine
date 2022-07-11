@@ -1,3 +1,5 @@
 {
-	"Tangerine\\" : "src/"
+	"Tangerine\\" : "src/",
+	"Everest\\" : "libs/Everest/src/",
+	"TangerineTests" : "test/"
 }
