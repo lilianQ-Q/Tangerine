@@ -1,9 +1,14 @@
 <?php
 namespace Tangerine;
 
+use Tangerine\exceptions\MissingDataException;
+
 class Engine
 {
 	public array $blocks = array();
+	public array $data = array();
+	private array $phpVariables = array();
+	private array $echos = array();
 	public string $cachePath;
 	public string $viewsFolder;
 	public bool $cacheEnabled;
@@ -24,8 +29,9 @@ class Engine
 	 */
 	public function render(string $fileName, $data = array()) : string
 	{
+		$this->data = $data;
 		$cachedFile = $this->cache($fileName);
-		extract($data, EXTR_SKIP);
+		extract($this->data, EXTR_SKIP);
 
 		ob_start();
 		require($cachedFile);
@@ -49,7 +55,7 @@ class Engine
 			mkdir($this->cachePath, 0744);
 		
 		$cachedFile = "{$this->cachePath}/" . str_replace(array('/', '.html'), array('_', ''), $file . '.php');
-		if (!$this->cacheEnabled || !file_exists($cachedFile) || filemtime($cachedFile) < filemtime($file))
+		if (!$this->cacheEnabled || !file_exists($cachedFile) || filemtime($cachedFile) < filemtime("{$this->viewsFolder}/$file"))
 		{
 			$code = $this->includeFiles($file);
 			$code = $this->compileCode($code);
@@ -83,9 +89,10 @@ class Engine
 	{
 		$code = $this->compileBlock($code);
 		$code = $this->compileYield($code);
+		$code = $this->compilePHP($code);
 		$code = $this->compileEscapedEchos($code);
 		$code = $this->compileEchos($code);
-		$code = $this->compilePHP($code);
+		$code = $this->checkVariables($code);
 		return ($code);
 	}
 
@@ -113,9 +120,21 @@ class Engine
 	 * @param string $code Code to compile
 	 * @return string Compiled code
 	 */
-	private function compilePhp(string $code)
+	private function compilePhp(string $code) : string
 	{
+		preg_match('~\{%\s*(.+?)\s*\%}~is', $code, $matches);
+		if (!empty($matches))
+		{
+			preg_match_all('/\$([\w]+)/', $matches[1], $variables);
+			$this->phpVariables = array_merge($this->phpVariables, $variables[1]);
+		}
 		return (preg_replace('~\{%\s*(.+?)\s*\%}~is', '<?php $1 ?>', $code));
+	}
+
+	private function checkVariables(string $code) : string
+	{
+		
+		return ($code);
 	}
 
 	/**
@@ -126,6 +145,16 @@ class Engine
 	 */
 	private function compileEchos(string $code)
 	{
+		preg_match_all('/{{\s*\$([\w]+\s*)}}/is', $code, $matches);
+		if (!empty($matches[0]))
+		{
+			foreach ($matches[1] as $varName)
+			{
+				$varName = trim($varName, ' ');
+				if (!array_key_exists($varName, $this->data) && !in_array("$varName", $this->phpVariables))
+					throw new MissingDataException(sprintf("%s variable is not passed to the engine when loading template.", $varName));
+			}
+		}
 		return (preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo $1 ?>', $code));
 	}
 
