@@ -113,4 +113,4 @@ Lilian Damiens - <a href="https://twitter.com/damiens_lilian">@damiens_lilian</a
 <br><br>
 ## Acknowledgments
 - Thanks to David Adams and his article called <a href="https://codeshack.io/lightweight-template-engine-php/">Lightweight Template Engine with PHP</a> released in September 2020 on <a href="https://codeshack.io">codeshack.io</a>. 
-It was really helpful to me especially the regex part, I really learned a lot. My ambitions are to add functionnalities by myself on this repo and use it for my own clients.
+It was really helpful to me especially the regex part, I really learned a lot..
